@@ -2,14 +2,27 @@ import { useDeferredValue, useEffect, useState } from "react"
 import { Movies, useMoviestore } from "./store";
 import { searchMovies } from "./utils/apicalls";
 
-const Header = () => {
+/**
+* The Header component contains a search input field and handles the search functionality.
+* It uses a deferred value to delay the search operation until typing has stopped.
+*
+* @returns {JSX.Element} A div element containing the search input field.
+*/
+const Header = (): JSX.Element => {
+    // State for the search text input.
     const [text, setText] = useState('')
+
+    // Deferred value for the search text to reduce the frequency of search operations.
     const deferredText = useDeferredValue(text)
+
+    // Function from the store to update the search results.
     const searchTitles = useMoviestore((state: { searchTitles: (term: string, data: Movies[]) => void }) => state.searchTitles);
 
+    // Effect to perform the search operation whenever the deferredText changes.
     useEffect(() => {
         searchMovies(deferredText, 0).then(resp => {
             if (!resp) return
+            // Update the search results in the store with the response data.
             searchTitles(deferredText, resp.data)
         })
     }, [deferredText])

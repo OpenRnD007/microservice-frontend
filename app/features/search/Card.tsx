@@ -2,7 +2,14 @@ import { ImdbImage } from "../shared"
 import { Movies } from "./store"
 import { useRouter } from 'next/navigation'
 
-const Card = ({ data }: { data: Movies }) => {
+/**
+* The Card component represents a single movie card in a list of movies.
+* It displays the movie's image, title, year, and genres, and provides interaction to navigate to the movie's details.
+*
+* @param {{ data: Movies }} { data } - The props object containing the movie data to display.
+* @returns {JSX.Element} A div element representing the movie card.
+*/
+const Card = ({ data }: { data: Movies }): JSX.Element => {
     const router = useRouter()
     return (
         <div className=" cursor-pointer relative flex flex-col shadow-md rounded-xl overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all duration-300 max-w-sm">

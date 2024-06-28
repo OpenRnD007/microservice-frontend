@@ -2,9 +2,17 @@ import Card from "./Card"
 import useSetMoviesListing from "./hooks/useMoviesListing";
 import { Movies, useMoviestore } from "./store";
 import { useShallow } from 'zustand/react/shallow'
-
-const List = () => {
+/**
+* The List component renders a paginated list of movies title.
+* It provides buttons to navigate between pages and displays movie cards.
+*
+* @returns {JSX.Element} A main element containing the paginated list of movies titles.
+*/
+const List = (): JSX.Element => {
+    // Retrieves the list of movies from the store.
     const movies: Movies[] = useMoviestore(useShallow((state) => state.movies));
+
+    // Retrieves the pagination function from the store.
     const { paginate } = useSetMoviesListing()
 
     return (

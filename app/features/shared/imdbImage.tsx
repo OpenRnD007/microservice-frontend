@@ -1,29 +1,39 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
 
-const ImdbImage = ({ tconst }: { tconst: string }) => {
+/**
+* The ImdbImage component fetches and displays an image from IMDb for a given title.
+*
+* @param {{ tconst: string }} { tconst } - The props object containing the IMDb title ID (tconst).
+* @returns {JSX.Element} An image element displaying the movie poster.
+*/
+const ImdbImage = ({ tconst }: { tconst: string }): JSX.Element => {
+    // State to hold the image path, initialized with a placeholder image.
     const [imgpath, setImgpath] = useState<string>("https://placehold.co/800x600?text=Loading....")
 
     useEffect(() => {
+        // Controllers to abort the HTTP requests if the component unmounts.
         let abortController = new AbortController()
         let abortControllerOmd = new AbortController()
         if (tconst) {
+            // Check if the image URL is already stored in localStorage.
             let currUrl = window.localStorage.getItem(tconst)
             if (currUrl) {
                 setImgpath(currUrl)
             } else {
+                // Fetch the image URL from the API.
                 (async () => {
                     try {
-                        const resp = await axios.get(`https://www.myapifilms.com/imdb/idIMDB?idIMDB=${tconst}&token=05e5daaf-0257-4cbd-8f31-7e3e69e48f2c&format=json`, { signal: abortController.signal })
+                        const resp = await axios.get(`https://www.myapifilms.com/imdb/idIMDB?idIMDB=${tconst}&token=${process.env.NEXT_PUBLIC_MYAPIFILMS}&format=json`, { signal: abortController.signal })
                         if (resp && resp.data && resp.data.data && resp.data.data.movies && resp.data.data.movies.length && resp.data.data.movies[0].urlPoster) {
                             setImgpath(resp.data.data.movies[0].urlPoster)
                             window.localStorage.setItem(tconst, resp.data.data.movies[0].urlPoster)
                         }
                     } catch {
                         try {
-                            await axios.get(`https://img.omdbapi.com/?i=${tconst}&apikey=c00911b5`, { signal: abortControllerOmd.signal })
-                            setImgpath(`https://img.omdbapi.com/?i=${tconst}&apikey=c00911b5`)
-                            window.localStorage.setItem(tconst, `https://img.omdbapi.com/?i=${tconst}&apikey=c00911b5`)
+                            await axios.get(`https://img.omdbapi.com/?i=${tconst}&apikey=${process.env.NEXT_PUBLIC_OMDBAPI}`, { signal: abortControllerOmd.signal })
+                            setImgpath(`https://img.omdbapi.com/?i=${tconst}&apikey=${process.env.NEXT_PUBLIC_OMDBAPI}`)
+                            window.localStorage.setItem(tconst, `https://img.omdbapi.com/?i=${tconst}&apikey=${process.env.NEXT_PUBLIC_OMDBAPI}`)
                         } catch (err) {
                             console.log(err)
                         }
@@ -31,6 +41,7 @@ const ImdbImage = ({ tconst }: { tconst: string }) => {
                 })()
             }
         }
+        // Cleanup function to abort any ongoing requests when the component unmounts.
         return () => {
             abortController.abort()
             abortControllerOmd.abort()

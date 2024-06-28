@@ -18,7 +18,13 @@ interface MoviesState {
     searchTitles: (term: string, data: Movies[]) => void;
 };
 
-// Create the store with Zustand
+/**
+* Creates a Zustand store to manage the state of movies.
+* The store contains an array of movies, the current page, and the search term.
+* It provides actions to set movies, navigate pages, and search titles.
+*
+* @returns A Zustand hook that provides access to the movies state and actions to interact with it.
+*/
 export const useMoviestore = create<MoviesState>()(persist((set) => ({
     movies: [],
     searchTerm: "",
@@ -33,5 +39,5 @@ export const useMoviestore = create<MoviesState>()(persist((set) => ({
         set({ searchTerm: term, movies: data, page: 0 })
     },
 }), {
-    "name": "movies-storage"
+    "name": "movies-storage" // Name of the storage key for persisting the store's state.
 }));

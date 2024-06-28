@@ -17,7 +17,12 @@ interface TitleState {
     setMovie: (data: Title) => void;
 };
 
-// Create the store with Zustand
+/**
+* Creates a Zustand store to manage the state of the movie title.
+* The store contains the movie title details and a setter function to update it.
+*
+* @returns A Zustand hook that provides access to the movie title state and actions to interact with it.
+*/
 export const useTitlestore = create<TitleState>()((set) => ({
     movie: {} as Title,
     setMovie: (movie: Title) => {

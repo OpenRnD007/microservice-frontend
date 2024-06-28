@@ -3,7 +3,14 @@ import { useRouter } from "next/navigation";
 import useTitleDetials from "./hooks/useTitleDetials";
 import { ImdbImage } from "../shared";
 
-const MovieTitle = ({ title }: { title: string }) => {
+/**
+* The MovieTitle component displays detailed information about a movie.
+* It uses a custom hook to fetch movie details and renders them within a styled layout.
+*
+* @param {{ title: string }} { title } - The props object containing the movie title.
+* @returns {JSX.Element} A JSX element representing the movie details layout.
+*/
+const MovieTitle = ({ title }: { title: string }): JSX.Element => {
     const router = useRouter()
     useTitleDetials(title)
 
